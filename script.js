@@ -54,13 +54,13 @@ function hashMap() {
             } else {
                 return false;
             }
-            
+
         },
 
         remove: function(key) {
             const index = this.hash(key);
 
-            if(this.buckets[index]) {
+            if(this.buckets[index] && this.buckets[index].key == key) {
                 delete this.buckets[index];
                 return true;
             } else {
