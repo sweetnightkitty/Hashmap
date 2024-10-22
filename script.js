@@ -40,7 +40,7 @@ function hashMap() {
             const index = this.hash(key);
 
             if(this.buckets[index]) {
-                return this.buckets[index];
+                return this.buckets[index].value;
             } else {
                 return null;
             }
@@ -49,7 +49,7 @@ function hashMap() {
         has: function(key) {
             const index = this.hash(key);
 
-            if(this.buckets[index]) {
+            if(this.buckets[index] && this.buckets[index].key == key) {
                 return true;
             } else {
                 return false;
