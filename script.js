@@ -1,5 +1,5 @@
 function hashMap() {
-    let defaultArray = new Array(16); // Array.apply(null, Array(16).map(function() {}));
+    const defaultArray = new Array(16); // Array.apply(null, Array(16).map(function() {}));
     return {
         buckets: defaultArray,
 
@@ -60,7 +60,14 @@ function hashMap() {
                 }
             }
             return length;
-        }
+        },
+
+        clear: function() {
+            for(let i = 0; i < defaultArray.length; i++) {
+                delete defaultArray[i];
+            }
+            this.buckets = defaultArray;
+        },
 
     }
 }
