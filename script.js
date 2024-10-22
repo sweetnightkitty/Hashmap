@@ -85,6 +85,17 @@ function hashMap() {
             this.buckets = defaultArray;
         },
 
+        keys: function() {
+            const keys = [];
+
+            for(let i = 0; i < this.buckets.length; i++) {
+                if(this.buckets[i]) {
+                    keys.push(this.buckets[i].key);
+                }
+            }
+            return keys;
+        }
+
     }
 }
 
