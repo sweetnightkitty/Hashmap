@@ -94,6 +94,18 @@ function hashMap() {
                 }
             }
             return keys;
+        },
+
+        values: function() {
+            const values = [];
+
+            for(let i = 0; i < this.buckets.length; i++) {
+                if(this.buckets[i]) {
+                    values.push(this.buckets[i].value);
+                }
+            }
+
+            return values;
         }
 
     }
