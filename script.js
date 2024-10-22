@@ -1,6 +1,6 @@
 function hashMap() {
     const defaultArray = new Array(16); // Array.apply(null, Array(16).map(function() {}));
-    const keys = [];
+
     return {
         buckets: defaultArray,
 
@@ -29,6 +29,10 @@ function hashMap() {
             newEntry.key = key;
             newEntry.value = value;
 
+            if (index < 0 || index >= buckets.length) {
+                throw new Error("Trying to access index out of bound");
+            }
+              
             if(this.buckets[index] && this.buckets[index].key != key) {
                 throw new Error(`Collision with a pre-existing key ${this.buckets[index].key} at index ${index}`);
             } else {
@@ -39,6 +43,10 @@ function hashMap() {
         get: function(key) {
             const index = this.hash(key);
 
+            if (index < 0 || index >= buckets.length) {
+                throw new Error("Trying to access index out of bound");
+            }
+              
             if(this.buckets[index]) {
                 return this.buckets[index].value;
             } else {
@@ -49,6 +57,10 @@ function hashMap() {
         has: function(key) {
             const index = this.hash(key);
 
+            if (index < 0 || index >= buckets.length) {
+                throw new Error("Trying to access index out of bound");
+            }
+              
             if(this.buckets[index] && this.buckets[index].key == key) {
                 return true;
             } else {
@@ -60,6 +72,10 @@ function hashMap() {
         remove: function(key) {
             const index = this.hash(key);
 
+            if (index < 0 || index >= buckets.length) {
+                throw new Error("Trying to access index out of bound");
+            }
+              
             if(this.buckets[index] && this.buckets[index].key == key) {
                 delete this.buckets[index];
                 return true;
