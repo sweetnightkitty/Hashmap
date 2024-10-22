@@ -1,7 +1,16 @@
 function hashMap() {
     const defaultArray = new Array(16); // Array.apply(null, Array(16).map(function() {}));
+    const keys = [];
     return {
         buckets: defaultArray,
+
+        newKeyValue: function() {
+            const template = {
+                key: undefined,
+                value: undefined,
+            }
+            return template;
+        },
 
         hash: function(key) {
             let hashCode = 0;
@@ -16,9 +25,15 @@ function hashMap() {
 
         set: function(key, value) {
             const index = this.hash(key);
+            const newEntry = this.newKeyValue();
+            newEntry.key = key;
+            newEntry.value = value;
 
-            //how to compare this key, to the key at the index, if that index exists
-            this.buckets[index] = value;
+            if(this.buckets[index] && this.buckets[index].key != key) {
+                throw new Error(`Collision with a pre-existing key ${this.buckets[index].key} at index ${index}`);
+            } else {
+                this.buckets[index] = newEntry;
+            }
         },
 
         get: function(key) {
