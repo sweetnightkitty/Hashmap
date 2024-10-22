@@ -39,6 +39,27 @@ function hashMap() {
             } else {
                 return false;
             }
+        },
+
+        remove: function(key) {
+            const index = this.hash(key);
+
+            if(this.buckets[index]) {
+                delete this.buckets[index];
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        length: function() {
+            let length = 0;
+            for(let i = 0; i < this.buckets.length; i++) {
+                if(this.buckets[i]) {
+                    length++;
+                }
+            }
+            return length;
         }
 
     }
