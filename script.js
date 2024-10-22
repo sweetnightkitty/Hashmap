@@ -54,6 +54,7 @@ function hashMap() {
             } else {
                 return false;
             }
+            
         },
 
         remove: function(key) {
