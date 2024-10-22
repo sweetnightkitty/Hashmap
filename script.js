@@ -29,6 +29,16 @@ function hashMap() {
             } else {
                 return null;
             }
+        },
+
+        has: function(key) {
+            const index = this.hash(key);
+
+            if(this.buckets[index]) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
     }
