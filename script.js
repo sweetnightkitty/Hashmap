@@ -143,7 +143,10 @@ function hashMap() {
 
             for(let i = 0; i < this.buckets.length; i++) {
                 if(this.buckets[i]) {
-                    entries.push(this.buckets[i]);
+                    const listLength = this.buckets[i].size();
+                    for(let j = 0; j < listLength; j++) {
+                        entries.push(this.buckets[i].at(j));
+                    }
                 }
             }
             
