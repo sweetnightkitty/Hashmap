@@ -115,9 +115,9 @@ function hashMap() {
 
             for(let i = 0; i < this.buckets.length; i++) {
                 if(this.buckets[i]) {
-                    const length = this.buckets[i].size();
-                    for(let j = 0; j < length; j++) {
-                        keys.push(this.buckets[i].at(j).value);
+                    const listLength = this.buckets[i].size();
+                    for(let j = 0; j < listLength; j++) {
+                        keys.push(this.buckets[i].at(j).key);
                     }
                 }
             }
@@ -129,10 +129,12 @@ function hashMap() {
 
             for(let i = 0; i < this.buckets.length; i++) {
                 if(this.buckets[i]) {
-                    values.push(this.buckets[i].value);
+                    const listLength = this.buckets[i].size();
+                    for(let j = 0; j < listLength; j++) {
+                        values.push(this.buckets[i].at(j).value);
+                    }
                 }
             }
-
             return values;
         },
 
