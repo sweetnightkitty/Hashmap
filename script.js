@@ -31,8 +31,8 @@ function hashMap() {
                 const list = createLinkedList()
                 list.append(key, value);
                 this.buckets[index] = list;
-            } else if(this.buckets[index] && this.buckets[index].containsKey(key)) {
-                    const listIndex = this.buckets[index].findIndexOfKey(key);
+            } else if(this.buckets[index] && this.buckets[index].contains(key)) {
+                    const listIndex = this.buckets[index].find(key);
                     this.buckets[index].changeValue(listIndex, value);
             } else {
                     this.buckets[index].append(key, value);
@@ -46,8 +46,8 @@ function hashMap() {
                 throw new Error("Trying to access index out of bound");
             }
               
-            if(this.buckets[index] && this.buckets[index].containsKey(key)) {
-                const listIndex = this.buckets[index].findIndexOfKey(key);
+            if(this.buckets[index] && this.buckets[index].contains(key)) {
+                const listIndex = this.buckets[index].find(key);
                 const node = this.buckets[index].at(listIndex);
                 return node.value;
             } else {
@@ -230,19 +230,9 @@ function createLinkedList() {
             return total;
         },
 
-        contains: function(value) {
-            let currentNode = this.firstNode;
-            while(currentNode) {
-                if(currentNode.value == value) {
-                    return true;
-                }
-                currentNode = currentNode.next;
-            }
-            return false;
-        },
 
         //Checks if the key exists
-        containsKey: function(key) {
+        contains: function(key) {
             let currentNode = this.firstNode;
 
             while(currentNode) {
@@ -254,6 +244,7 @@ function createLinkedList() {
             return false;
         },
 
+        //Returns the node at that index
         at: function(index) {
             let currentNode = this.firstNode;
             const length = this.size();
@@ -269,19 +260,8 @@ function createLinkedList() {
 
         },
 
-        find: function(value) {
-            let currentNode = this.firstNode;
-            const length = this.size();
-            for(let i = 0; i < length; i++) {
-                if(currentNode.value == value) {
-                    return i;
-                }
-                currentNode = currentNode.next;
-            }
-            return null;
-        },
-
-        findIndexOfKey: function(key) {
+        //Finds the index for that key
+        find: function(key) {
             let currentNode = this.firstNode;
             const length = this.size();
             for(let i = 0; i < length; i++) {
