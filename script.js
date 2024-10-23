@@ -55,16 +55,14 @@ function hashMap() {
             }
         },
 
-        //Code below needs updated for linked lists
-
         has: function(key) {
             const index = this.hash(key);
 
             if (index < 0 || index >= this.buckets.length) {
                 throw new Error("Trying to access index out of bound");
             }
-              
-            if(this.buckets[index] && this.buckets[index].key == key) {
+
+            if(this.buckets[index] && this.buckets[index].contains(key)) {
                 return true;
             } else {
                 return false;
@@ -72,6 +70,7 @@ function hashMap() {
 
         },
 
+        //
         remove: function(key) {
             const index = this.hash(key);
 
