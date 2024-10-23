@@ -24,26 +24,18 @@ function hashMap() {
         },
 
         set: function(key, value) {
-            const index = this.hash(key);
-            const newEntry = this.newKeyValue();
-            newEntry.key = key;
-            newEntry.value = value;
+            const index = this.hash(key); 
 
-            if (index < 0 || index >= this.buckets.length) {
-                throw new Error("Trying to access index out of bound");
-            }
-              
-            if(this.buckets[index] && this.buckets[index].key != key) {
-                throw new Error(`Collision with a pre-existing key ${this.buckets[index].key} at index ${index}`);
+            //Immediately appends the head when the bucket is empty
+            if(!this.buckets[index]) {
+                const list = createLinkedList()
+                list.append(key, value);
+                this.buckets[index] = list;
+            } else if(this.buckets[index] && this.buckets[index].containsKey(key)) {
+                    const listIndex = this.buckets[index].findIndexOfKey(key);
+                    this.buckets[index].changeValue(listIndex, value);
             } else {
-                this.buckets[index] = newEntry;
-            }
-
-            const capacity = this.buckets.length;
-            const numOfBuckets = this.length();
-
-            if(numOfBuckets > capacity * this.loadFactor) {
-                this.buckets.length = capacity * 2;
+                    this.buckets[index].append(key, value);
             }
         },
 
@@ -54,12 +46,16 @@ function hashMap() {
                 throw new Error("Trying to access index out of bound");
             }
               
-            if(this.buckets[index]) {
-                return this.buckets[index].value;
+            if(this.buckets[index] && this.buckets[index].containsKey(key)) {
+                const listIndex = this.buckets[index].findIndexOfKey(key);
+                const node = this.buckets[index].at(listIndex);
+                return node.value;
             } else {
                 return null;
             }
         },
+
+        //Code below needs updated for linked lists
 
         has: function(key) {
             const index = this.hash(key);
@@ -149,4 +145,198 @@ function hashMap() {
     }
 }
 
+
+
+
+
+function createNode() {
+    return {
+        key: null,
+        value: null,
+        next: null,
+    };
+}
+
+function createLinkedList() {
+    return {
+        firstNode: null, //by default
+
+        lastNode: function() {
+            let currentNode = this.firstNode;
+            while(currentNode) {
+                if(!currentNode.next) {
+                    return currentNode;
+                }
+                currentNode = currentNode.next;
+            }
+        },
+
+        head: function() {
+            if(!this.firstNode) {
+                return "List is empty";
+            } else {
+                return this.firstNode.value;
+            }
+        },
+
+        //Appends new value but no linking
+        append: function(key, value) {
+            let newNode = createNode();
+            newNode.key = key;
+            newNode.value = value;
+
+            if(!this.firstNode) {
+                this.firstNode = newNode;
+                return;
+            }
+
+            //iterate over the list - if the currentNode.key = key; replace value
+            //if the key does not exist append
+
+            let currentNode = this.firstNode;
+            while(currentNode.next) {
+                currentNode = currentNode.next
+            }
+
+            currentNode.next = newNode
+        },
+
+
+        tail: function() {
+            let currentNode = this.firstNode;
+            if(currentNode.next == null) {
+                return currentNode.value;
+            }
+
+            while(currentNode) {
+                if(currentNode.next == null) {
+                    return currentNode.value;
+                }
+                currentNode = currentNode.next;
+            }
+        },
+
+        size: function() {
+            if(!this.firstNode) {
+                return 0;
+            }
+
+            let currentNode = this.firstNode;
+            let total = 0;
+            while(currentNode) {
+                total++;
+                currentNode = currentNode.next;
+            }
+            return total;
+        },
+
+        contains: function(value) {
+            let currentNode = this.firstNode;
+            while(currentNode) {
+                if(currentNode.value == value) {
+                    return true;
+                }
+                currentNode = currentNode.next;
+            }
+            return false;
+        },
+
+        //Checks if the key exists
+        containsKey: function(key) {
+            let currentNode = this.firstNode;
+
+            while(currentNode) {
+                if(currentNode.key == key) {
+                    return true;
+                }
+                currentNode = currentNode.next
+            }
+            return false;
+        },
+
+        at: function(index) {
+            let currentNode = this.firstNode;
+            const length = this.size();
+
+            for(let i = 0; i < length; i++) {
+                if(i == index) {
+                    return currentNode;
+                }
+                currentNode = currentNode.next;
+
+            }
+            return undefined;
+
+        },
+
+        find: function(value) {
+            let currentNode = this.firstNode;
+            const length = this.size();
+            for(let i = 0; i < length; i++) {
+                if(currentNode.value == value) {
+                    return i;
+                }
+                currentNode = currentNode.next;
+            }
+            return null;
+        },
+
+        findIndexOfKey: function(key) {
+            let currentNode = this.firstNode;
+            const length = this.size();
+            for(let i = 0; i < length; i++) {
+                if(currentNode.key == key) {
+                    return i;
+                }
+                currentNode = currentNode.next;
+            }
+            return null;
+        },
+
+
+        print: function() {
+            let currentNode = this.firstNode;
+            while(currentNode) {
+                console.log(currentNode.value);
+                currentNode = currentNode.next;
+            }
+        },
+
+        toString: function() {
+            let currentNode = this.firstNode;
+            let string = "";
+            while(currentNode) {
+                if(currentNode.next) {
+                    const value = `( ${currentNode.value} ) -> `;
+                    string += value;
+                } else {
+                    const value = `( ${currentNode.value} ) -> null`;
+                    string += value;
+                }
+                currentNode = currentNode.next;
+            }
+            console.log(string);
+        },
+
+        changeValue: function(index, value) {
+            let currentNode = this.firstNode;
+            const length = this.size();
+            
+            for(let i = 0; i < length; i++) {
+                if(i == index) {
+                    currentNode.value = value;
+                }
+                currentNode = currentNode.next;
+            }
+        }
+
+    }
+}
+
+
+
+
 const test = hashMap();
+test.set("dog", "tramp");
+test.set("god", "religion");
+
