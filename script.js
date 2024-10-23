@@ -115,7 +115,10 @@ function hashMap() {
 
             for(let i = 0; i < this.buckets.length; i++) {
                 if(this.buckets[i]) {
-                    keys.push(this.buckets[i].key);
+                    const length = this.buckets[i].size();
+                    for(let j = 0; j < length; j++) {
+                        keys.push(this.buckets[i].at(j).value);
+                    }
                 }
             }
             return keys;
