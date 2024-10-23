@@ -70,7 +70,6 @@ function hashMap() {
 
         },
 
-        //
         remove: function(key) {
             const index = this.hash(key);
 
@@ -78,8 +77,13 @@ function hashMap() {
                 throw new Error("Trying to access index out of bound");
             }
               
-            if(this.buckets[index] && this.buckets[index].key == key) {
-                delete this.buckets[index];
+            if(this.buckets[index] && this.buckets[index].contains(key)) {
+                const listIndex = this.buckets[index].find(key);
+                if(listIndex == 0 && this.buckets[index].size() == 1) {
+                    delete this.buckets[index];
+                } else {
+                    this.buckets[index].removeAt(listIndex);
+                }
                 return true;
             } else {
                 return false;
@@ -307,6 +311,32 @@ function createLinkedList() {
                 }
                 currentNode = currentNode.next;
             }
+        },
+
+        removeAt: function(index) {
+            let currentNode = this.firstNode;
+            const length = this.size();
+            let leftNode;
+            let targetNode;
+
+            if(!this.firstNode) {
+                return;
+            } else if(index == 0) {
+                this.firstNode = this.firstNode.next;
+                return;
+            }
+
+            for(let i = 0; i < length; i++) {
+                if(i == (index - 1)) {
+                    leftNode = currentNode;
+                };
+                if(i == index) {
+                    targetNode = currentNode;
+                }
+                currentNode = currentNode.next;
+            }
+
+            leftNode.next = targetNode.next;
         }
 
     }
