@@ -14,7 +14,7 @@ function hashMap() {
 
         hash: function(key) {
             let hashCode = 0;
-            const primeNumber = 49;
+            const primeNumber = 31;
             for (let i = 0; i < key.length; i++) {
                 hashCode = primeNumber * hashCode + key.charCodeAt(i);
                 hashCode = hashCode % this.buckets.length;
@@ -29,7 +29,7 @@ function hashMap() {
             newEntry.key = key;
             newEntry.value = value;
 
-            if (index < 0 || index >= buckets.length) {
+            if (index < 0 || index >= this.buckets.length) {
                 throw new Error("Trying to access index out of bound");
             }
               
@@ -38,12 +38,19 @@ function hashMap() {
             } else {
                 this.buckets[index] = newEntry;
             }
+
+            const capacity = this.buckets.length;
+            const numOfBuckets = this.length();
+
+            if(numOfBuckets > capacity * this.loadFactor) {
+                this.buckets.length = capacity * 2;
+            }
         },
 
         get: function(key) {
             const index = this.hash(key);
 
-            if (index < 0 || index >= buckets.length) {
+            if (index < 0 || index >= this.buckets.length) {
                 throw new Error("Trying to access index out of bound");
             }
               
@@ -57,7 +64,7 @@ function hashMap() {
         has: function(key) {
             const index = this.hash(key);
 
-            if (index < 0 || index >= buckets.length) {
+            if (index < 0 || index >= this.buckets.length) {
                 throw new Error("Trying to access index out of bound");
             }
               
@@ -72,7 +79,7 @@ function hashMap() {
         remove: function(key) {
             const index = this.hash(key);
 
-            if (index < 0 || index >= buckets.length) {
+            if (index < 0 || index >= this.buckets.length) {
                 throw new Error("Trying to access index out of bound");
             }
               
@@ -84,6 +91,7 @@ function hashMap() {
             }
         },
 
+        //How many entries exist in the hashmap
         length: function() {
             let length = 0;
             for(let i = 0; i < this.buckets.length; i++) {
@@ -93,6 +101,8 @@ function hashMap() {
             }
             return length;
         },
+
+        loadFactor: 0.75,
 
         clear: function() {
             for(let i = 0; i < defaultArray.length; i++) {
@@ -139,4 +149,4 @@ function hashMap() {
     }
 }
 
-const hashing = hashMap();
+const test = hashMap();
