@@ -1,5 +1,6 @@
 function hashMap() {
-    const defaultArray = new Array(16); // Array.apply(null, Array(16).map(function() {}));
+    let capacity = 16;
+    const defaultArray = new Array(capacity); // Array.apply(null, Array(16).map(function() {}));
 
     return {
         buckets: defaultArray,
@@ -37,6 +38,21 @@ function hashMap() {
             } else {
                     this.buckets[index].append(key, value);
             }
+
+            //capacity = length of the array - default 16; want to grow it by 2s
+            const nodes = this.entries();
+            if(nodes.length > capacity * this.loadFactor) {
+                capacity *= 2;
+                this.buckets = new Array(capacity);
+
+                for(let i = 0; i < nodes.length; i++) {
+                    const thisKey = nodes[i].key;
+                    const thisValue = nodes[i].value;
+                    this.set(thisKey, thisValue);
+                }
+            }
+
+
         },
 
         get: function(key) {
@@ -90,12 +106,12 @@ function hashMap() {
             }
         },
 
-        //How many entries exist in the hashmap
+        //How many entries exist in the hashmap, regardless of if they are stored in linked lists or not
         length: function() {
             let length = 0;
             for(let i = 0; i < this.buckets.length; i++) {
                 if(this.buckets[i]) {
-                    length++;
+                    length += this.buckets[i].size();
                 }
             }
             return length;
@@ -354,6 +370,20 @@ function createLinkedList() {
 
 
 const test = hashMap();
-test.set("dog", "tramp");
-test.set("god", "religion");
+
+
+test.set('apple', 'red')
+test.set('banana', 'yellow')
+test.set('carrot', 'orange')
+test.set('dog', 'brown')
+test.set('elephant', 'gray')
+test.set('frog', 'green')
+test.set('grape', 'purple')
+test.set('hat', 'black')
+test.set('ice cream', 'white')
+test.set('jacket', 'blue')
+test.set('kite', 'pink')
+test.set('lion', 'golden')
+
+
 
